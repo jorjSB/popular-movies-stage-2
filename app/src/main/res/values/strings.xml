@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Popular Movies Stage_1</string>
+
+    <string name="no_internet">Network coonection not available! \n Please check your internet connection and try again!w</string>
+    <string name="details_poster_caption">Movie poster</string>
+    <string name="release_date">Release date:</string>
+    <string name="original_title">Original title:</string>
+
+    <string name="most_popular">Most Popular</string>
+    <string name="top_rated">Top Rated</string>
+</resources>
