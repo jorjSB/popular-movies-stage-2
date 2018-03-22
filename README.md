@@ -1,5 +1,5 @@
-# popular-movies-stage-1
-ND project: part 1 of the "Popular Movies"
+# popular-movies-stage-2
+ND project: part 2 of the "Popular Movies"
 --
 
 
