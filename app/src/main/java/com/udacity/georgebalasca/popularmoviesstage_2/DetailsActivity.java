@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1;
+package com.udacity.georgebalasca.popularmoviesstage_2;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.udacity.georgebalasca.popularmoviesstage_1.models.Movie;
+import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 
 public class DetailsActivity extends AppCompatActivity {
 

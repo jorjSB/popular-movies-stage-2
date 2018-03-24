@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1;
+package com.udacity.georgebalasca.popularmoviesstage_2;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -10,14 +10,14 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.udacity.georgebalasca.popularmoviesstage_1.arrayadapters.MoviesListArrayAdapter;
-import com.udacity.georgebalasca.popularmoviesstage_1.models.Movie;
-import com.udacity.georgebalasca.popularmoviesstage_1.utils.NetUtils;
+import com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters.MoviesListArrayAdapter;
+import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
+import com.udacity.georgebalasca.popularmoviesstage_2.utils.NetUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.udacity.georgebalasca.popularmoviesstage_1.utils.JsonUtils.getMoviesArray;
+import static com.udacity.georgebalasca.popularmoviesstage_2.utils.JsonUtils.getMoviesArray;
 
 public class MainActivity extends AppCompatActivity {
 

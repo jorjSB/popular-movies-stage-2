@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1.utils;
+package com.udacity.georgebalasca.popularmoviesstage_2.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

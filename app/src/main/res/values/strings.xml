@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies Stage_1</string>
+    <string name="app_name">Popular Movies Stage_2</string>
 
     <string name="no_internet">Network coonection not available! \n Please check your internet connection and try again!w</string>
     <string name="details_poster_caption">Movie poster</string>

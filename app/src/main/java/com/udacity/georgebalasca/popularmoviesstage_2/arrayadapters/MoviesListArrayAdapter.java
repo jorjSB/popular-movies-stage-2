@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1.arrayadapters;
+package com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.udacity.georgebalasca.popularmoviesstage_1.DetailsActivity;
-import com.udacity.georgebalasca.popularmoviesstage_1.R;
-import com.udacity.georgebalasca.popularmoviesstage_1.models.Movie;
+import com.udacity.georgebalasca.popularmoviesstage_2.DetailsActivity;
+import com.udacity.georgebalasca.popularmoviesstage_2.R;
+import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 
 import java.util.ArrayList;
 

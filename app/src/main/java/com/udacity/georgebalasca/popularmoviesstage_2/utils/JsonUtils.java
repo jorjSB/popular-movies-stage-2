@@ -1,6 +1,6 @@
-package com.udacity.georgebalasca.popularmoviesstage_1.utils;
+package com.udacity.georgebalasca.popularmoviesstage_2.utils;
 
-import com.udacity.georgebalasca.popularmoviesstage_1.models.Movie;
+import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;

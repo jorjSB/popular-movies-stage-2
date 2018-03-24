@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1;
+package com.udacity.georgebalasca.popularmoviesstage_2;
 
 import org.junit.Test;
 

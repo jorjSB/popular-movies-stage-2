@@ -1,4 +1,4 @@
-package com.udacity.georgebalasca.popularmoviesstage_1;
+package com.udacity.georgebalasca.popularmoviesstage_2;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

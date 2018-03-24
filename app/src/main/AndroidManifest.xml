@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.udacity.georgebalasca.popularmoviesstage_1">
+    package="com.udacity.georgebalasca.popularmoviesstage_2">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name="com.udacity.georgebalasca.popularmoviesstage_2.MainActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -22,11 +22,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailsActivity"
-            android:parentActivityName=".MainActivity">
+            android:name="com.udacity.georgebalasca.popularmoviesstage_2.DetailsActivity"
+            android:parentActivityName="com.udacity.georgebalasca.popularmoviesstage_2.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="com.udacity.georgebalasca.popularmoviesstage_2.MainActivity"/>
         </activity>
     </application>
 
