@@ -15,7 +15,8 @@
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="1.0" />
 
         <TextView
             android:id="@+id/vote_average"
@@ -47,7 +48,8 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/movie_poster"
-            app:layout_constraintStart_toStartOf="@+id/movie_poster" />
+            app:layout_constraintStart_toStartOf="@+id/movie_poster"
+            />
 
 
         <TextView
@@ -113,5 +115,19 @@
             app:layout_constraintStart_toEndOf="@+id/label2"
             app:layout_constraintTop_toTopOf="@+id/label2"
             />
+
+    <ImageButton
+        android:id="@+id/favorites_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/movie_title"
+        app:layout_constraintEnd_toEndOf="@+id/movie_poster"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/movie_title"
+        app:layout_constraintTop_toTopOf="@+id/movie_title"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        android:background="@android:color/transparent"/>
 
     </android.support.constraint.ConstraintLayout>

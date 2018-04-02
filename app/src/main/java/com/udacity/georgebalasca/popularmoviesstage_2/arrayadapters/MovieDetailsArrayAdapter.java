@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +111,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
         TextView movieDescriptionTv;
         TextView originalTitleTv;
         TextView releaseDateTv;
+        ImageButton favoritesButton;
 
         // inflating the views into the holder
         public ViewHolderDetails(final View itemView) {
@@ -120,10 +123,11 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
             movieDescriptionTv = itemView.findViewById(R.id.movie_description);
             originalTitleTv = itemView.findViewById(R.id.original_title);
             releaseDateTv = itemView.findViewById(R.id.release_date);
+            favoritesButton = itemView.findViewById(R.id.favorites_button);
         }
 
         // binding the views
-        public void bindViews(Context context) {
+        public void bindViews(final Context context) {
             if(mMovie != null){
                 Picasso.with(context).load(mMovie.getPosterLandURL()).into(posterIv);
                 movieTitleTv.setText(mMovie.getTitle());
@@ -131,6 +135,13 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
                 movieDescriptionTv.setText(mMovie.getOverview());
                 originalTitleTv.setText(mMovie.getOriginalTitle());
                 releaseDateTv.setText(mMovie.getReleaseDate());
+
+                favoritesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
     }
