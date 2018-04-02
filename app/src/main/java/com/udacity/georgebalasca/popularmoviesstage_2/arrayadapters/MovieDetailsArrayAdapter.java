@@ -1,6 +1,8 @@
 package com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.georgebalasca.popularmoviesstage_2.R;
@@ -140,11 +143,30 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
         public ViewHolderTrailers(final View itemView) {
             super(itemView);
             trailerName = itemView.findViewById(R.id.trailer_name);
+
         }
 
         // binding the views
-        public void bindViews(Context context, int position) {
+        public void bindViews(final Context context, final int position) {
             trailerName.setText( trailers.get(position).getName() );
+
+            if(trailers.get(position).getSite().compareToIgnoreCase("YouTube") == 0)
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String video_path = "http://www.youtube.com/watch?v=" + trailers.get(position).getKey();
+                        Uri uri = Uri.parse(video_path);
+
+                        // With this line the Youtube application, if installed, will launch immediately.
+                        // Without it you will be prompted with a list of the application to choose.
+                        uri = Uri.parse("vnd.youtube:"  + uri.getQueryParameter("v"));
+
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        context.startActivity(intent);
+                    }
+                });
+            else
+                trailerName.setText(trailers.get(position).getName() + " (n/a player)");
         }
     }
 
@@ -153,16 +175,22 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     public class ViewHolderReviews extends RecyclerView.ViewHolder {
         TextView authorName;
+        TextView reviewContent;
+        TextView reviewSource;
 
         // inflating the views into the holder
         public ViewHolderReviews(final View itemView) {
             super(itemView);
             authorName = itemView.findViewById(R.id.author_name);
+            reviewContent = itemView.findViewById(R.id.review_content);
+            reviewSource = itemView.findViewById(R.id.review_source);
         }
 
         // binding the views
         public void bindViews(Context context, int position) {
             authorName.setText( reviews.get(position).getAuthor() );
+            reviewContent.setText( reviews.get(position).getContent() );
+            reviewSource.setText( reviews.get(position).getUrl() );
         }
     }
 
