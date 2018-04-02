@@ -124,12 +124,14 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
 
         // binding the views
         public void bindViews(Context context) {
-            Picasso.with(context).load(mMovie.getPosterLandURL()).into(posterIv);
-            movieTitleTv.setText(mMovie.getTitle());
-            voteAverageTv.setText(String.valueOf(mMovie.getVoteAverage()));
-            movieDescriptionTv.setText(mMovie.getOverview());
-            originalTitleTv.setText(mMovie.getOriginalTitle());
-            releaseDateTv.setText(mMovie.getReleaseDate());
+            if(mMovie != null){
+                Picasso.with(context).load(mMovie.getPosterLandURL()).into(posterIv);
+                movieTitleTv.setText(mMovie.getTitle());
+                voteAverageTv.setText(String.valueOf(mMovie.getVoteAverage()));
+                movieDescriptionTv.setText(mMovie.getOverview());
+                originalTitleTv.setText(mMovie.getOriginalTitle());
+                releaseDateTv.setText(mMovie.getReleaseDate());
+            }
         }
     }
 
@@ -150,7 +152,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
         public void bindViews(final Context context, final int position) {
             trailerName.setText( trailers.get(position).getName() );
 
-            if(trailers.get(position).getSite().compareToIgnoreCase("YouTube") == 0)
+            if(trailers!= null && trailers.get(position).getSite().compareToIgnoreCase("YouTube") == 0)
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -188,14 +190,21 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
 
         // binding the views
         public void bindViews(Context context, int position) {
-            authorName.setText( reviews.get(position).getAuthor() );
-            reviewContent.setText( reviews.get(position).getContent() );
-            reviewSource.setText( reviews.get(position).getUrl() );
+            if(reviews != null){
+                authorName.setText( reviews.get(position).getAuthor() );
+                reviewContent.setText( reviews.get(position).getContent() );
+                reviewSource.setText( reviews.get(position).getUrl() );
+            }
         }
     }
 
 
-    public void updateVideos(ArrayList<Trailer> trailers) {
+    public void updateDetails(Movie movie) {
+        this.mMovie = movie;
+        notifyDataSetChanged();
+    }
+
+    public void updateTrailers(ArrayList<Trailer> trailers) {
         this.trailers = trailers;
         notifyDataSetChanged();
     }

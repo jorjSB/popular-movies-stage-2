@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         noInternetTV = findViewById(R.id.no_internet);
         gridView = findViewById(R.id.movies_grid);
-
     }
 
     @Override
