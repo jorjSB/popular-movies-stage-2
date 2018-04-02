@@ -38,6 +38,10 @@ public class NetUtils{
     private static final String PATH_P =  "p";
     private static final String MOVIE_POSTER_SIZE = "w185"; //"w185"
 
+    // used to get particular movie data(along with movie's ID)
+    private static final String EXTRAS_VIDEOS = "videos";
+    private static final String EXTRAS_REVIEWS = "reviews";
+
 
     /**
      * Method to build URL for the movies list(with sorting). Chose to add to avoid confusion about params in the buildUrl(..) method.
@@ -46,7 +50,7 @@ public class NetUtils{
      * @return
      */
     public static URL getMoviesListSortedUrl(String api_key_value, String sort_by) {
-        return buildUrl(api_key_value, sort_by, null);
+        return buildUrl(api_key_value, sort_by, null, 0, null);
     }
 
     /**
@@ -56,7 +60,31 @@ public class NetUtils{
      * @return
      */
     public static URL getMoviePosterURL(String api_key_value, String poster_path) {
-        return buildUrl(api_key_value, null, poster_path);
+        return buildUrl(api_key_value, null, poster_path, 0, null);
+    }
+
+    /**
+     * Method used to get the URL for getting a movie's videos
+     *
+     * @param api_key_value
+     * @param movie_id
+     * @return
+     */
+    public static URL getMovieVideosURL(String api_key_value, int movie_id) {
+        //    https://api.themoviedb.org/3/movie/337167/videos?api_key=********&language=en-US&page=1
+        return buildUrl(api_key_value, null, null, movie_id, EXTRAS_VIDEOS);
+    }
+
+    /**
+     * Method used to get the URL for getting a movie's comments
+     *
+     * @param api_key_value
+     * @param movie_id
+     * @return
+     */
+    public static URL getMovieReviewsURL(String api_key_value, int movie_id) {
+        //    https://api.themoviedb.org/3/movie/337167/reviews?api_key=*******&language=en-US&page=1
+        return buildUrl(api_key_value, null, null, movie_id, EXTRAS_REVIEWS);
     }
 
     /**
@@ -65,9 +93,11 @@ public class NetUtils{
      * @param api_key_value
      * @param sort_by
      * @param poster_path
+     * @param movie_id - if needed particular movie extras, the movie ID is needed
+     * @param extras - particular movie extras (ex: videos, reviews)
      * @return
      */
-    private static URL buildUrl(String api_key_value, String sort_by, String poster_path) {
+    private static URL buildUrl(String api_key_value, String sort_by, String poster_path, int movie_id, String extras) {
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEME);
@@ -87,6 +117,15 @@ public class NetUtils{
                    .appendPath(PATH_P)
                    .appendPath(MOVIE_POSTER_SIZE)
                    .appendPath(poster_path);
+        // build URL for extras (videos, comments)
+        } else if (extras != null && movie_id != 0){
+            builder.authority(API_BASE_URL)
+                    .appendPath(API_VERSION)
+                    .appendPath(TYPE_MOVIE)
+                    .appendPath(String.valueOf(movie_id))
+                    .appendPath(extras)
+                    .appendQueryParameter(API_KEY_KEY, api_key_value)
+                    .appendQueryParameter(LANGUAGE_KEY, LANGUAGE_VAL);
         }
 
         URL url = null;
