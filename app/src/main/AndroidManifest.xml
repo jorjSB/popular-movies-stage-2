@@ -28,6 +28,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.udacity.georgebalasca.popularmoviesstage_2.MainActivity"/>
         </activity>
+
+        <!-- Register the TaskContentProvider -->
+        <!-- Set name, authorities, and exported attributes -->
+        <!-- exported = false limits access to this ContentProvider to only this app -->
+        <provider
+            android:name="com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContentProvider"
+            android:authorities="com.udacity.georgebalasca.popularmoviesstage_2"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

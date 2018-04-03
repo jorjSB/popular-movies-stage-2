@@ -1,10 +1,12 @@
 package com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.georgebalasca.popularmoviesstage_2.R;
+import com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Review;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Trailer;
@@ -136,13 +139,92 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
                 originalTitleTv.setText(mMovie.getOriginalTitle());
                 releaseDateTv.setText(mMovie.getReleaseDate());
 
+                updateFavouriteMovieVisualIndicator(favoritesButton);
                 favoritesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show();
+                        updateDatabaseWithFavouriteMovie();
+                        updateFavouriteMovieVisualIndicator(favoritesButton);
                     }
                 });
             }
+        }
+    }
+
+    /**
+     * Update the visual star indicator
+     * Favourite movie: star selected
+     * Not a favourite movie: star unselected
+     */
+    private void updateFavouriteMovieVisualIndicator(ImageButton imageButton) {
+
+        if(isMovieAddedToFavourites() != -1)
+            imageButton.setImageResource(android.R.drawable.btn_star_big_on);
+        else
+            imageButton.setImageResource(android.R.drawable.btn_star_big_off);
+
+    }
+
+    /**
+     *  Used to query the DB to see if a movie is added to Fav. (by movie's Identifier)
+     * @return
+     */
+    private int isMovieAddedToFavourites() {
+        final ContentResolver resolver = context.getContentResolver();
+        final String[] projection = { MovieContract.MovieEntry._ID, MovieContract.MovieEntry.COLUMN_TITLE, MovieContract.MovieEntry.COLUMN_IDENTIFIER };
+
+        Cursor cursor = resolver.query(MovieContract.MovieEntry.CONTENT_URI, projection, MovieContract.MovieEntry.COLUMN_IDENTIFIER + " == ?" ,
+                new String[] { String.valueOf(mMovie.getId()) }, null);
+
+        if(cursor.getCount() == 0)
+            return -1;
+
+        cursor.moveToFirst();
+
+        // return the DB id if it's a match\
+
+        return cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_IDENTIFIER)) == mMovie.getId() ?
+                cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)) :
+                -1;
+    }
+
+
+
+    /**
+     * Used to update the database(insert/delete fav. movie)
+     */
+    private void updateDatabaseWithFavouriteMovie() {
+
+        Uri mUri = MovieContract.MovieEntry.CONTENT_URI;
+
+        if(isMovieAddedToFavourites() == -1){
+            // Create new empty ContentValues object
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, mMovie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_IDENTIFIER, mMovie.getId());
+
+            // Insert the content values via a ContentResolver
+            Uri uri = context.getContentResolver().insert(mUri, contentValues);
+
+            // Display a success action toast
+            if(uri != null) {
+                Toast.makeText(context,
+                        context.getResources().getString(R.string.successfully_saved_as_favourite_prefix)
+                        + " " + mMovie.getTitle() + " "
+                        + context.getResources().getString(R.string.successfully_saved_as_favourite_suffix),
+                        Toast.LENGTH_LONG).show();
+            }
+        }else{
+            mUri = mUri.buildUpon().appendPath( String.valueOf(isMovieAddedToFavourites()) ).build();
+
+            int moviesDeleted = context.getContentResolver().delete(mUri, null, null);
+
+            if(moviesDeleted > 0)
+                Toast.makeText(context,
+                        context.getResources().getString(R.string.successfully_deleted_from_favourite_prefix)
+                                + " " + mMovie.getTitle() + " "
+                                + context.getResources().getString(R.string.successfully_deleted_from_favourite_suffix)
+                        , Toast.LENGTH_LONG).show();
         }
     }
 

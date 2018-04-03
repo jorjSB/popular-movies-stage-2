@@ -11,4 +11,9 @@
 
     <string name="no_interet_movie_details">Can\'t load trailers or reviews. Please check your internet connection and try again</string>
     <string name="not_youtube_video">Unknown source (not a youtube video)</string>
+
+    <string name="successfully_saved_as_favourite_prefix">Successfully added</string>
+    <string name="successfully_saved_as_favourite_suffix">to your favourite list.</string>
+    <string name="successfully_deleted_from_favourite_prefix">Successfully deleted</string>
+    <string name="successfully_deleted_from_favourite_suffix">from your favourite list.</string>
 </resources>
