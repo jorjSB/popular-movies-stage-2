@@ -13,4 +13,9 @@
         android:enabled="false"
         android:title="@string/top_rated"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/favourites"
+        android:enabled="false"
+        android:title="@string/favourites"
+        app:showAsAction="never" />
 </menu>

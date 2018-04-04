@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters.MoviesListArrayAdapter;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private Menu optionsMenu;
     private ArrayList<Movie> moviesArray;
     private final String MOVIES_ARRAY_STATE_KEY = "movies_array_state_key";
+    private final String SHOW_FAVOURITES = "show_favourites";
+
+    private  MoviesListArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
 
         noInternetTV = findViewById(R.id.no_internet);
         gridView = findViewById(R.id.movies_grid);
+
+        moviesArray = new ArrayList<>();
+
+        adapter = new MoviesListArrayAdapter(this,
+                moviesArray);
+
+        // attach the adapter to the GridView
+        gridView.setAdapter(adapter);
     }
 
     @Override
@@ -48,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         // if already have data, inflate view, else fetch data
         if(moviesArray != null && moviesArray.size() > 0)
-            inflateGridView();
+            updateGridView();
         else
             loadMoviesData();
     }
@@ -98,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
             order_by = NetUtils.SORT_BY_POPULAR;
         else if (id == R.id.top_rated)
             order_by = NetUtils.SORT_BY_TOP_RATED;
+        else if (id == R.id.favourites)
+            order_by = SHOW_FAVOURITES;
 
         // fetch new data data
         loadMoviesData();
@@ -118,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
             selectedMenuItem  = optionsMenu.findItem(R.id.most_popular);
         else if(order_by.equals(NetUtils.SORT_BY_TOP_RATED))
             selectedMenuItem  = optionsMenu.findItem(R.id.top_rated);
+        else if(order_by.equals(SHOW_FAVOURITES))
+            selectedMenuItem  = optionsMenu.findItem(R.id.favourites);
 
         // set the item as disabled, enable the rest
 
@@ -134,14 +150,18 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private void loadMoviesData() {
-        // Build my URL for fetching data based on my private key, and the type of data needed!
-        URL initialMoviesListURL =  NetUtils.getMoviesListSortedUrl(getResources().getString(R.string.api_key_v3), order_by);
+        if(order_by.compareTo(SHOW_FAVOURITES) != 0){
+            // Build my URL for fetching data based on my private key, and the type of data needed!
+            URL initialMoviesListURL =  NetUtils.getMoviesListSortedUrl(getResources().getString(R.string.api_key_v3), order_by);
 
-        // fetch result
-        if(NetUtils.isOnline(this))
-            new AsyncFetchData().execute(initialMoviesListURL);
-        else
-            noInternetTV.setVisibility(View.VISIBLE);
+            // fetch result
+            if(NetUtils.isOnline(this))
+                new AsyncFetchData().execute(initialMoviesListURL);
+            else
+                noInternetTV.setVisibility(View.VISIBLE);
+        }else{
+            Toast.makeText(this, "Show saved movies from DB", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -164,19 +184,17 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String data) {
             if (data != null) {
                 moviesArray = getMoviesArray(getResources().getString(R.string.api_key_v3), data);
-                inflateGridView();
+                updateGridView();
             }
         }
     }
 
     /**
-     * Create adapter and nflate the grid view
+     * Create adapter and inflate the grid view
      */
-    private void inflateGridView() {
-        MoviesListArrayAdapter adapter = new MoviesListArrayAdapter(getApplicationContext(),
-                moviesArray );
-        // attach the adapter to the GridView
-        gridView.setAdapter(adapter);
+    private void updateGridView() {
+
+        adapter.updateAdapter(moviesArray);
 
         if(lastListPosition != -1)
             gridView.setSelection(lastListPosition);

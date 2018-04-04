@@ -167,7 +167,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
 
     /**
      *  Used to query the DB to see if a movie is added to Fav. (by movie's Identifier)
-     * @return
+     * @return -1 if not in the DB, != -1 if added
      */
     private int isMovieAddedToFavourites() {
         final ContentResolver resolver = context.getContentResolver();

@@ -1,17 +1,22 @@
 <resources>
     <string name="app_name">Popular Movies Stage_2</string>
 
-    <string name="no_internet">Network coonection not available! \n Please check your internet connection and try again!w</string>
+    <!-- Movie details labels -->
     <string name="details_poster_caption">Movie poster</string>
     <string name="release_date">Release date:</string>
     <string name="original_title">Original title:</string>
 
+    <!--top menu items-->
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="favourites">Favourites</string>
 
+    <!-- Errors -->
+    <string name="no_internet">Network coonection not available! \n Please check your internet connection and try again!w</string>
     <string name="no_interet_movie_details">Can\'t load trailers or reviews. Please check your internet connection and try again</string>
     <string name="not_youtube_video">Unknown source (not a youtube video)</string>
 
+    <!-- Added/deleted movie from DB -->
     <string name="successfully_saved_as_favourite_prefix">Successfully added</string>
     <string name="successfully_saved_as_favourite_suffix">to your favourite list.</string>
     <string name="successfully_deleted_from_favourite_prefix">Successfully deleted</string>
