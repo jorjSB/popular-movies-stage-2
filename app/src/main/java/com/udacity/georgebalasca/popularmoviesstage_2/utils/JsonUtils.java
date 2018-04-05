@@ -169,7 +169,7 @@ public class JsonUtils {
         String posterLandUrl = NetUtils.getMoviePosterURL( api_key ,data.optString("backdrop_path").replaceAll("/","")).toString();
 
         movie.setId(data.optInt("id"));
-        movie.setvoteAverage( BigDecimal.valueOf(data.optDouble("vote_average")).floatValue() );
+        movie.setVoteAverage( BigDecimal.valueOf(data.optDouble("vote_average")).floatValue() );
         movie.setTitle(data.optString("title"));
         movie.setOriginalTitle(data.optString("title"));
         movie.setOverview(data.optString("overview"));

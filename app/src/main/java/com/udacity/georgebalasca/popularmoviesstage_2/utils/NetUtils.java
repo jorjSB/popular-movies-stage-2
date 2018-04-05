@@ -1,15 +1,25 @@
 package com.udacity.georgebalasca.popularmoviesstage_2.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 
+import com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 
@@ -41,7 +51,6 @@ public class NetUtils{
     // used to get particular movie data(along with movie's ID)
     private static final String EXTRAS_VIDEOS = "videos";
     private static final String EXTRAS_REVIEWS = "reviews";
-
 
     /**
      * Method to build URL for the movies list(with sorting). Chose to add to avoid confusion about params in the buildUrl(..) method.
@@ -174,5 +183,47 @@ public class NetUtils{
                 (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+
+    /**
+     * Returns the name of the file from a URL
+     * @param url
+     * @return
+     */
+    public static String getFileNameFromURL(String url) {
+        if (url == null) {
+            return "";
+        }
+        try {
+            URL resource = new URL(url);
+            String host = resource.getHost();
+            if (host.length() > 0 && url.endsWith(host)) {
+                // handle ...example.com
+                return "";
+            }
+        }
+        catch(MalformedURLException e) {
+            return "";
+        }
+
+        int startIndex = url.lastIndexOf('/') + 1;
+        int length = url.length();
+
+        // find end index for ?
+        int lastQMPos = url.lastIndexOf('?');
+        if (lastQMPos == -1) {
+            lastQMPos = length;
+        }
+
+        // find end index for #
+        int lastHashPos = url.lastIndexOf('#');
+        if (lastHashPos == -1) {
+            lastHashPos = length;
+        }
+
+        // calculate the end index
+        int endIndex = Math.min(lastQMPos, lastHashPos);
+        return url.substring(startIndex, endIndex);
     }
 }

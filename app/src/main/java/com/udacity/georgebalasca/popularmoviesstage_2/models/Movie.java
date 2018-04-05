@@ -84,7 +84,7 @@ public class Movie implements Parcelable {
         return voteAverage;
     }
 
-    public void setvoteAverage(Float voteAverage) {
+    public void setVoteAverage(Float voteAverage) {
         this.voteAverage = voteAverage;
     }
 
@@ -116,7 +116,7 @@ public class Movie implements Parcelable {
         this.setOriginalTitle(in.readString());
         this.setOverview(in.readString());
         this.setReleaseDate(in.readString());
-        this.setvoteAverage(in.readFloat());
+        this.setVoteAverage(in.readFloat());
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

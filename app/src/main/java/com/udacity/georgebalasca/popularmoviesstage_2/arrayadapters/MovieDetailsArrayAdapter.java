@@ -3,8 +3,11 @@ package com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,19 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.udacity.georgebalasca.popularmoviesstage_2.R;
 import com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Review;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Trailer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.udacity.georgebalasca.popularmoviesstage_2.utils.NetUtils.getFileNameFromURL;
 
 public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -36,6 +46,8 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
     private ArrayList<Trailer> trailers;
     private ArrayList<Review> reviews;
     private Context context;
+
+    private  static  final String TAG = MovieDetailsArrayAdapter.class.getSimpleName();
 
     public MovieDetailsArrayAdapter(Movie movie, ArrayList<Trailer> trailers, ArrayList<Review> reviews, Context context) {
         this.mMovie = movie;
@@ -132,12 +144,22 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
         // binding the views
         public void bindViews(final Context context) {
             if(mMovie != null){
-                Picasso.with(context).load(mMovie.getPosterLandURL()).into(posterIv);
                 movieTitleTv.setText(mMovie.getTitle());
                 voteAverageTv.setText(String.valueOf(mMovie.getVoteAverage()));
                 movieDescriptionTv.setText(mMovie.getOverview());
                 originalTitleTv.setText(mMovie.getOriginalTitle());
                 releaseDateTv.setText(mMovie.getReleaseDate());
+
+                // check load the appropiate image(FROM URL OF FROM LOCAL FILE)
+                if(mMovie != null)
+                    if( URLUtil.isValidUrl( mMovie.getPosterURL() ))
+                        Picasso.with(context)
+                                .load( mMovie.getPosterLandURL() )
+                                .into(posterIv);
+                    else
+                        Picasso.with(context)
+                                .load( new File(mMovie.getPosterLandURL()) )
+                                .into(posterIv);
 
                 updateFavouriteMovieVisualIndicator(favoritesButton);
                 favoritesButton.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +211,6 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
 
-
     /**
      * Used to update the database(insert/delete fav. movie)
      */
@@ -202,6 +223,20 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
             ContentValues contentValues = new ContentValues();
             contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, mMovie.getTitle());
             contentValues.put(MovieContract.MovieEntry.COLUMN_IDENTIFIER, mMovie.getId());
+
+            contentValues.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, mMovie.getOriginalTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, mMovie.getOverview());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, mMovie.getVoteAverage());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, getImageLocalFile(mMovie.getPosterURL()).toString());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER_LAND, getImageLocalFile(mMovie.getPosterLandURL()).toString());
+
+            // save locally the poster
+            Picasso.with(context).load(mMovie.getPosterURL()).into(picassoImageTarget(context, "imageDir", getFileNameFromURL(mMovie.getPosterURL())));
+            // save locally the poster landscape
+            Picasso.with(context).load(mMovie.getPosterLandURL() ).into(picassoImageTarget(context, "imageDir", getFileNameFromURL(mMovie.getPosterLandURL())));
+
+
 
             // Insert the content values via a ContentResolver
             Uri uri = context.getContentResolver().insert(mUri, contentValues);
@@ -225,7 +260,22 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
                                 + " " + mMovie.getTitle() + " "
                                 + context.getResources().getString(R.string.successfully_deleted_from_favourite_suffix)
                         , Toast.LENGTH_LONG).show();
+
+            // delete saved images
+            if (getImageLocalFile(mMovie.getPosterURL()).delete()
+                    && getImageLocalFile(mMovie.getPosterLandURL()).delete()){
+                //  Log.d(TAG, "Deleted successfully");
+            }
+
         }
+    }
+
+    // returns the local file where the image is stored (for deleting, display etc)
+    private File getImageLocalFile(String imageUrl){
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+        return new File(directory, getFileNameFromURL(imageUrl));
     }
 
     /**
@@ -305,5 +355,47 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
     public void updateReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
         notifyDataSetChanged();
+    }
+
+
+
+    private Target picassoImageTarget(Context context, final String imageDir, final String imageName) {
+        ContextWrapper cw = new ContextWrapper(context);
+        final File directory = cw.getDir(imageDir, Context.MODE_PRIVATE); // path to /data/data/yourapp/app_imageDir
+
+//        final File directory = new File("file:///android_asset/");
+//        final File directory = context.getFilesDir();
+        return new Target() {
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final File myImageFile = new File(directory, imageName); // Create image file
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(myImageFile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                fos.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                if (placeHolderDrawable != null) {}
+            }
+        };
     }
 }

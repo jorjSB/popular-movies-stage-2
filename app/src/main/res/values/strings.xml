@@ -12,7 +12,7 @@
     <string name="favourites">Favourites</string>
 
     <!-- Errors -->
-    <string name="no_internet">Network coonection not available! \n Please check your internet connection and try again!w</string>
+    <string name="no_internet">Network coonection not available!\nPlease check your internet connection and try again, or check your saved movies list!</string>
     <string name="no_interet_movie_details">Can\'t load trailers or reviews. Please check your internet connection and try again</string>
     <string name="not_youtube_video">Unknown source (not a youtube video)</string>
 
@@ -21,4 +21,6 @@
     <string name="successfully_saved_as_favourite_suffix">to your favourite list.</string>
     <string name="successfully_deleted_from_favourite_prefix">Successfully deleted</string>
     <string name="successfully_deleted_from_favourite_suffix">from your favourite list.</string>
+    <string name="no_fav_movies">You have no movies added to favourites</string>
+
 </resources>

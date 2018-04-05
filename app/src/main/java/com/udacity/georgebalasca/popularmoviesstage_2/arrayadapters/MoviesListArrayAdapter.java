@@ -4,11 +4,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
@@ -18,6 +20,7 @@ import com.udacity.georgebalasca.popularmoviesstage_2.R;
 import com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract;
 import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,7 @@ public class MoviesListArrayAdapter extends ArrayAdapter<Movie> {
 
     private ArrayList<Movie> mMovies;
     private Context mContext;
+    private static final String TAG = MovieDetailsArrayAdapter.class.getSimpleName();
     /**
      * Custom constructor for our adapter
      *
@@ -64,15 +68,21 @@ public class MoviesListArrayAdapter extends ArrayAdapter<Movie> {
         moviePosterView.setAdjustViewBounds(true);
         moviePosterView.setPadding(0, 0, 0, 0);
 
-//        if(mMovies != null)
-//            return convertView;
 
-            // Gets the Movie object from the ArrayAdapter at the appropriate position
-            final Movie mMovie = mMovies.get(position);
+        // Gets the Movie object from the ArrayAdapter at the appropriate position
+        final Movie mMovie = mMovies.get(position);
 
-            Picasso.with(mContext)
-                    .load(mMovie != null ? mMovie.getPosterURL() : null)
-                    .into(moviePosterView);
+
+        // check load the appropiate image(FROM URL OF FROM LOCAL FILE)
+        if(mMovie != null)
+            if( URLUtil.isValidUrl( mMovie.getPosterURL() ))
+                Picasso.with(mContext)
+                        .load( mMovie.getPosterURL() )
+                        .into(moviePosterView);
+            else
+                Picasso.with(mContext)
+                        .load( new File(mMovie.getPosterURL()) )
+                        .into(moviePosterView);
 
             showStarIfFavourite(movieFavIndicator, mMovie);
 
@@ -105,12 +115,9 @@ public class MoviesListArrayAdapter extends ArrayAdapter<Movie> {
 
     }
 
-    public void updateAdapter(ArrayList<Movie> movies){
-        this.mMovies.clear();
-        this.mMovies.addAll(movies);
-
-        this.notifyDataSetChanged();
-        Log.d("inflateGridView()", "data: " + mMovies.size());
-
+    public void updateAdapter(ArrayList<Movie> newMovies){
+            this.mMovies.clear();
+            this.mMovies.addAll(newMovies);
+            this.notifyDataSetChanged();
     }
 }
