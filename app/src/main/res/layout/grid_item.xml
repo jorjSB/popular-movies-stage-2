@@ -24,6 +24,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/movie_poster"
         app:layout_constraintEnd_toEndOf="@+id/movie_poster"
-        android:src="@android:drawable/btn_star_big_on"/>
+        android:src="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/star_movie_cd" />
 
 </android.support.constraint.ConstraintLayout>

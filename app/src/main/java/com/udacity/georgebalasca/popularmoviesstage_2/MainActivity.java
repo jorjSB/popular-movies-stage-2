@@ -8,14 +8,12 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.georgebalasca.popularmoviesstage_2.arrayadapters.MoviesListArrayAdapter;
 import com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract;
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String MOVIES_ARRAY_STATE_KEY = "movies_array_state_key";
     private final String SHOW_FAVOURITES = "show_favourites";
     // db's loader id
-    private final int MOVIES_LOADER_ID = 0;
+    private final static int MOVIES_LOADER_ID = 0;
     private Cursor moviesCursor;
 
     private  MoviesListArrayAdapter adapter;
@@ -125,12 +123,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         // sets the global variable: order_by
-        if (id == R.id.most_popular)
-            order_by = NetUtils.SORT_BY_POPULAR;
-        else if (id == R.id.top_rated)
-            order_by = NetUtils.SORT_BY_TOP_RATED;
-        else if (id == R.id.favourites)
-            order_by = SHOW_FAVOURITES;
+        switch (id) {
+            case R.id.most_popular:
+                order_by = NetUtils.SORT_BY_POPULAR;
+                break;
+            case R.id.top_rated:
+                order_by = NetUtils.SORT_BY_TOP_RATED;
+                break;
+            case R.id.favourites:
+                order_by = SHOW_FAVOURITES;
+                break;
+        }
 
         // fetch new data data
         loadMoviesData();
@@ -148,12 +151,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // get the item that has to be disabled
         MenuItem selectedMenuItem = optionsMenu.findItem(R.id.most_popular);
-        if (order_by.equals(NetUtils.SORT_BY_POPULAR))
-            selectedMenuItem  = optionsMenu.findItem(R.id.most_popular);
-        else if(order_by.equals(NetUtils.SORT_BY_TOP_RATED))
-            selectedMenuItem  = optionsMenu.findItem(R.id.top_rated);
-        else if(order_by.equals(SHOW_FAVOURITES))
-            selectedMenuItem  = optionsMenu.findItem(R.id.favourites);
+        switch (order_by) {
+            case NetUtils.SORT_BY_POPULAR:
+                selectedMenuItem = optionsMenu.findItem(R.id.most_popular);
+                break;
+            case NetUtils.SORT_BY_TOP_RATED:
+                selectedMenuItem = optionsMenu.findItem(R.id.top_rated);
+                break;
+            case SHOW_FAVOURITES:
+                selectedMenuItem = optionsMenu.findItem(R.id.favourites);
+                break;
+        }
 
         // set the item as disabled, enable the rest
 
@@ -241,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      *
      * Implements the required callbacks to take care of loading data at all stages of loading.
      */
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, final Bundle loaderArgs) {
 

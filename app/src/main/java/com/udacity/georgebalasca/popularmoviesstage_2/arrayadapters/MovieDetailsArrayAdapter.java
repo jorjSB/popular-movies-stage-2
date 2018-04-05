@@ -71,15 +71,19 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_DETAILS) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_details, parent, false);
-            return new ViewHolderDetails(itemView);
-        } else if (viewType == VIEW_TYPE_TRAILERS) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_trailer_item, parent, false);
-            return new ViewHolderTrailers(itemView);
-        } else {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_review_item, parent, false);
-            return new ViewHolderReviews(itemView);
+        switch (viewType) {
+            case VIEW_TYPE_DETAILS: {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_details, parent, false);
+                return new ViewHolderDetails(itemView);
+            }
+            case VIEW_TYPE_TRAILERS: {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_trailer_item, parent, false);
+                return new ViewHolderTrailers(itemView);
+            }
+            default: {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_review_item, parent, false);
+                return new ViewHolderReviews(itemView);
+            }
         }
     }
 
@@ -198,16 +202,19 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
         Cursor cursor = resolver.query(MovieContract.MovieEntry.CONTENT_URI, projection, MovieContract.MovieEntry.COLUMN_IDENTIFIER + " == ?" ,
                 new String[] { String.valueOf(mMovie.getId()) }, null);
 
+        assert cursor != null;
         if(cursor.getCount() == 0)
             return -1;
 
         cursor.moveToFirst();
 
         // return the DB id if it's a match\
-
-        return cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_IDENTIFIER)) == mMovie.getId() ?
+        int returnVal = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_IDENTIFIER)) == mMovie.getId() ?
                 cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)) :
                 -1;
+        cursor.close();
+
+        return returnVal;
     }
 
 
@@ -264,7 +271,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
             // delete saved images
             if (getImageLocalFile(mMovie.getPosterURL()).delete()
                     && getImageLocalFile(mMovie.getPosterLandURL()).delete()){
-                //  Log.d(TAG, "Deleted successfully");
+                  Log.d(TAG, "Deleted successfully");
             }
 
         }
@@ -311,7 +318,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 });
             else
-                trailerName.setText(trailers.get(position).getName() + " (n/a player)");
+                trailerName.setText( context.getResources().getString(R.string.no_trailer_holder, trailers.get(position).getName()));
         }
     }
 
@@ -380,6 +387,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
                             e.printStackTrace();
                         } finally {
                             try {
+                                assert fos != null;
                                 fos.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -394,7 +402,7 @@ public class MovieDetailsArrayAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                if (placeHolderDrawable != null) {}
+                // if (placeHolderDrawable != null) {}
             }
         };
     }

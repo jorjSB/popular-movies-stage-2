@@ -128,6 +128,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/movie_title"
         app:layout_constraintTop_toTopOf="@+id/movie_title"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:srcCompat="@android:drawable/btn_star_big_off"
+        android:contentDescription="@string/star_movie_cd"/>
 
     </android.support.constraint.ConstraintLayout>

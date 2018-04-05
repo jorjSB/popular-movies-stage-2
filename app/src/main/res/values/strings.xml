@@ -14,7 +14,7 @@
     <!-- Errors -->
     <string name="no_internet">Network coonection not available!\nPlease check your internet connection and try again, or check your saved movies list!</string>
     <string name="no_interet_movie_details">Can\'t load trailers or reviews. Please check your internet connection and try again</string>
-    <string name="not_youtube_video">Unknown source (not a youtube video)</string>
+    <!--<string name="not_youtube_video">Unknown source (not a youtube video)</string>-->
 
     <!-- Added/deleted movie from DB -->
     <string name="successfully_saved_as_favourite_prefix">Successfully added</string>
@@ -22,5 +22,8 @@
     <string name="successfully_deleted_from_favourite_prefix">Successfully deleted</string>
     <string name="successfully_deleted_from_favourite_suffix">from your favourite list.</string>
     <string name="no_fav_movies">You have no movies added to favourites</string>
+    <string name="star_movie_cd">Favourite movie</string>
+    <string name="play_indicator_cd">Play movie indicator</string>
+    <string name="no_trailer_holder">%1$s  (n/a player)</string>
 
 </resources>

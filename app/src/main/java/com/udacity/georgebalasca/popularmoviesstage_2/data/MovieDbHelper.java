@@ -20,7 +20,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     /**
      * Called when the movies database is created for the first time.
      *
-     * @param db
+     * @param db - DB
      */
     @Override
     public void onCreate(SQLiteDatabase db) {

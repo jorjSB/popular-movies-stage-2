@@ -16,7 +16,8 @@
         android:background="@android:drawable/ic_media_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/play_indicator_cd"/>
 
     <TextView
         android:id="@+id/trailer_name"

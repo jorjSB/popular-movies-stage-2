@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import java.util.Objects;
+
 import static com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract.CONTENT_AUTHORITY;
 import static com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract.MovieEntry.TABLE_NAME;
 import static com.udacity.georgebalasca.popularmoviesstage_2.data.MovieContract.PATH_MOVIES;
@@ -86,7 +88,7 @@ public class MovieContentProvider extends ContentProvider {
         }
 
         // Notify the resolver if the uri has been changed, and return the newly inserted URI
-        getContext().getContentResolver().notifyChange(uri, null);
+        Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
 
         // Return constructed uri (this points to the newly inserted row of data)
         return returnUri;
@@ -122,7 +124,7 @@ public class MovieContentProvider extends ContentProvider {
         }
 
         // Set a notification URI on the Cursor and return that Cursor
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        retCursor.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
 
         // Return the desired Cursor
         return retCursor;
@@ -154,7 +156,7 @@ public class MovieContentProvider extends ContentProvider {
         // Notify the resolver of a change and return the number of items deleted
         if (moviesDeleted != 0) {
             // A movie was deleted, set notification
-            getContext().getContentResolver().notifyChange(uri, null);
+            Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
         }
 
         // Return the number of movies deleted

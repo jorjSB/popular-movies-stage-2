@@ -4,9 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.nfc.Tag;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +20,7 @@ import com.udacity.georgebalasca.popularmoviesstage_2.models.Movie;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Jorj on 03/02/2018.
@@ -84,7 +83,7 @@ public class MoviesListArrayAdapter extends ArrayAdapter<Movie> {
                         .load( new File(mMovie.getPosterURL()) )
                         .into(moviePosterView);
 
-            showStarIfFavourite(movieFavIndicator, mMovie);
+            showStarIfFavourite(movieFavIndicator, Objects.requireNonNull(mMovie));
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,6 +112,7 @@ public class MoviesListArrayAdapter extends ArrayAdapter<Movie> {
         }else
                 movieFavIndicator.setVisibility(View.GONE);
 
+        cursor.close();
     }
 
     public void updateAdapter(ArrayList<Movie> newMovies){
